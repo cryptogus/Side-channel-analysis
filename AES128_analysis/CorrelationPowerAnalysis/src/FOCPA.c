@@ -111,9 +111,9 @@ void CPA() {
 			
 			for (unsigned int j = 0; j < byte; j++) {
 				fscanf(plain, "%hhx", &plaintext[j]);
-                printf("%02x ",plaintext[j]);
+                //printf("%02x ",plaintext[j]);
 			}
-            printf("\n");
+            //printf("\n");
 			fseek(plain, 3 * (Block_Size - byte + 1) - 1, SEEK_CUR);
 			
 			
