@@ -7,8 +7,8 @@
 /***
  * AES128 Master Key range you want to find
 */
-#define start_byte					2
-#define last_byte					5
+#define start_byte					1
+#define last_byte					16
 
 /***
  * File path 
