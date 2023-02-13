@@ -1,4 +1,4 @@
-#include "parameter.h"
+#include "../include/parameter.h"
 
 //Hamming Weight
 unsigned int HW(unsigned long long x)
@@ -190,7 +190,7 @@ void CPA() {
 		printf("%02dst byte ratio %g   The second candidate: 0x%02x\n", start_byte + i, ratio[i], second_key[i]);
 	}
 	free(sum_x), free(sum_y), free(sum_x2), free(sum_y2);
-	for (unsigned long long i = 0; i < point_num; i++) {
+	for (unsigned long long i = 0; i < 256; i++) {
 		free(sum_xy[i]);
 	}
 	free(sum_xy);
