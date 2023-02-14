@@ -1,8 +1,6 @@
 # What is a Side-Channel Attack?
-Side channel analysis is an analysis method that acquires, processes, and analyzes   
-leakage information such as power consumption and electromagnetic waves generated when   
-a cryptographic algorithm is performed in an electronic device equipped with a cryptographic module.   
-This is the beginning of research in this field in a paper on the timing attack method presented by Kotcher in 1996.   
+Side channel analysis is an analysis method that acquires, processes, and analyzes leakage information such as power consumption and electromagnetic waves generated when a cryptographic algorithm is performed in an electronic device equipped with a cryptographic module. This is the beginning of research in this field in a paper on the timing attack method presented by Kotcher in 1996.   
+
 "Paul C. Kocher, Timing Attacks on Implementations of Diffie-Hellman, RSA, DSS, and Other Systems, 1996."
 
 # Side-Channel Attack 
