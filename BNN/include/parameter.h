@@ -1,11 +1,15 @@
 #ifndef _PARAM_
 #define _PARAM_
+// If you want to know the weights of the hidden nodes, erase this micro.
+#define first
+
 // If you want to open and use a large file larger than 2GB, you should define it as follows.
 #define __USE_LARGEFILE64 //fseeko64() so on..
 // https://www.ibm.com/docs/ko/i/7.3?topic=functions-fopen-open-files
 // https://m.blog.naver.com/PostView.naver?isHttpsRedirect=true&blogId=programsite&logNo=150013719920
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <math.h>
 #include <sys/types.h>
 #include <unistd.h>

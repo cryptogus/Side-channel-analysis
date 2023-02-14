@@ -9,10 +9,11 @@ int XnorDotProduct(int a, int b) {
 
 	return s;
 }
-char sign(int input) {
+//은닉층의 출력값을 -1 대신 0으로 바꿔주는 함수 -> 한 바이트로 묶어서 XnorDotProduct하려고
+char sign1(char input) {
 
 	if (input < 0) {
-		return -1;
+		return 0;
 	}
 	else {
 		return 1;
@@ -33,7 +34,6 @@ void CPA()
 	unsigned int	Key_HW								= 0;
 	unsigned int	R_Key								= 0;
 	unsigned int	Right_Key							= 0;
-	unsigned int	Index								= 0;
 
 
 	__int64			*H_S								= NULL;
@@ -55,7 +55,6 @@ void CPA()
 	double			Correlation_R						= 0.;
 	double			Max									= 0.;
 	double			Max_Sec								= 0.;
-	double			Ratio								= 0.;
 
 
 	u_int8_t	*input									= NULL;
@@ -68,8 +67,6 @@ void CPA()
 	
 	char state2 = 0;
 	char sum[8] = {0,};
-	char sum1 = 0;
-
 	trace_HEADER header;
 	fread(&header, sizeof(header), 1, trace);
 	printf(" ---------------------------Trace Information---------------------------\n");
@@ -77,7 +74,7 @@ void CPA()
 	printf("|	Number of Point	:	%d				|\n", header.point_no);
 	printf(" -----------------------------------------------------------------------\n");
 	/************************************************************************************/
-	/*                                   변수 동적할당                                   /
+	/*                                   변수 동적할당                                   */
 	/************************************************************************************/
 	// 평문 저장
 	input = (unsigned char *)malloc(_BLOCK_SIZE_ * sizeof(unsigned char));
@@ -111,25 +108,13 @@ void CPA()
 	/*                               First Order CPA 시작                               */
 	/************************************************************************************/
 	
-	// 값 초기화
-	for (pi = 0; pi < PI; pi++) {
-		W_CS[pi] = 0.0;
-		W_CSS[pi] = 0.0;
-		for (Guess_Key = 0; Guess_Key < _GUESS_KEY_NUM_; Guess_Key++) {
-			W_HS[Guess_Key][pi] = 0.0;
-		}
-	}
-	for (Guess_Key = 0; Guess_Key < _GUESS_KEY_NUM_; Guess_Key++) {
-		MaxPeak[Guess_Key] = 0;
-		H_S[Guess_Key] = 0;
-		H_SS[Guess_Key] = 0;
-	}
+	
 	printf(" -----------------------------------------------------------------------\n");
 	printf("|                            Loading Trace...                           |\n");
 	printf(" -----------------------------------------------------------------------\n");
-	
+// input nodes weight	
 	for (tn = 0; tn < TN; tn++) {
-
+		
 		// input or output 불러오기
 		//_fseeki64(fpp, ((__int64)_BLOCK_SIZE_ * (__int64)3 + (__int64)2) * (__int64)tn, SEEK_SET);
 		for (i = 0; i < _BLOCK_SIZE_; i++) {
@@ -137,10 +122,6 @@ void CPA()
 			//printf("%02x ", input[i]);
 		}
 		//printf("\n");
-		for (i = 0; i < _BLOCK_SIZE_2; i++) {
-			fscanf(fpp2, "%hhx", &output[i]);
-			//printf("%02x ", output[i]);
-		}
 		
 		// 포인트 값 불러오기
 		fseeko(trace, 32 + (tn*header.point_no + _START_POINT_ - 1)*4, SEEK_SET);
@@ -161,11 +142,35 @@ void CPA()
 
 		for (Guess_Key = 0; Guess_Key < _GUESS_KEY_NUM_; Guess_Key++) {
 			state2 = 0;
-			//input값을 이용한 계단함수 입력값을 중간값으로
+			//1st node's value of weight input값을 이용한 계단함수 입력값을 중간값으로
+#ifdef first
 			for (int a = 0; a < 8; a++)
 				state2 |= (input[a] << (7 - a));
 			state2 = XnorDotProduct(state2, Guess_Key);
 			Key = state2;
+			
+			// 2nd node's value of weight
+#else
+			for (int a = 0; a < 8; a++)
+				state2 |= (input[a] << (7 - a));
+
+
+			sum[0] = XnorDotProduct(state2, 0x66);
+			sum[1] = XnorDotProduct(state2, 0x36);
+			sum[2] = XnorDotProduct(state2, 0x8e);
+			sum[3] = XnorDotProduct(state2, 0xd2);
+			sum[4] = XnorDotProduct(state2, 0x27);
+			sum[5] = XnorDotProduct(state2, 0x4b);
+			sum[6] = XnorDotProduct(state2, 0x2e);
+			sum[7] = XnorDotProduct(state2, 0x55);
+			
+			state2 = 0;
+			for (int a = 0; a < 8; a++) {
+				sum[a] = sign1(sum[a]);
+				state2 |= (sum[a] << (7 - a));
+			}
+			Key = XnorDotProduct(state2, Guess_Key);
+#endif
 			
 
 			// Hamming Weight 계산
@@ -219,7 +224,7 @@ void CPA()
 			R_Key = Guess_Key;
 		}
 	}
-
+	fprintf(stdout,"\nValue of weight when BNN input(8 nodes, Think of each node as 1 bits) multiplied by weight\n\n");
 	fprintf(stdout, "  1st  0x%02X  %f\n", R_Key, Max);
 
 	MaxPeak[R_Key] = 0.0;
@@ -233,7 +238,6 @@ void CPA()
 		}
 		if (i == 1) {
 			fprintf(stdout, "  2nd  0x%02X  %g\n", Right_Key, Max_Sec);
-			Ratio = Max / Max_Sec;
 		}
 		else if (i == 2) {
 			fprintf(stdout, "  3rd  0x%02X  %g\n", Right_Key, Max_Sec);
