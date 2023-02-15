@@ -24,7 +24,7 @@ $ make
 $ cd output
 $ ./main
 ```
-### Order of weight values
+### Order of weight values (created by mathlab)
 **The order of the first weights**
 ![Fweight](./1weight.jpg)
 **The order of the second weights**
