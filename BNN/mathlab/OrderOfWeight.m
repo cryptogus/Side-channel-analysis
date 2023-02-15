@@ -12,12 +12,13 @@ END_POINT = 1120;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Right First Weight
 first_weight_str = '27 2E 36 4B 55 66 8E D2';
-%
+% Right Second Weight
 %second_weight_str = 'D2 14 8D 9A';
 
 START_BYTE = 1;
 %  Number of weight
 RESULT_NO = 8;
+%RESULT_NO = 4;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 

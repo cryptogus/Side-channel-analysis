@@ -29,3 +29,24 @@ $ ./main
 ![Fweight](./1weight.jpg)
 **The order of the second weights**
 ![Fweight](./2weight.jpg)
+**How to create plot?**
+```
+$ cd mathlab
+```
+start OrderOfWeight.m   
+
+If you want to get a second weighted graph, erase the %
+
+```mathlab
+%second_weight_str = 'D2 14 8D 9A';
+%RESULT_NO = 4;
+%KEY = sscanf(second_weight_str, '%x', [START_BYTE (START_BYTE + RESULT_NO - 1)]);
+%path=strcat(res_path, '\\mathlab\\second\\%03d(0x%02x).txt');
+```
+and add % In front of folows
+```
+first_weight_str
+RESULT_NO = 8
+KEY = sscanf(first_weight_str, '%x', [START_BYTE (START_BYTE + RESULT_NO - 1)]);
+path=strcat(res_path, '\\mathlab\\first\\%03d(0x%02x).txt');
+```
