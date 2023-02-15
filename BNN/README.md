@@ -53,3 +53,9 @@ RESULT_NO = 8
 KEY = sscanf(first_weight_str, '%x', [START_BYTE (START_BYTE + RESULT_NO - 1)]);
 path=strcat(res_path, '\\mathlab\\first\\%03d(0x%02x).txt');
 ```
+
+## Get the flag
+
+```
+$ gcc flag.c -o flag
+```
