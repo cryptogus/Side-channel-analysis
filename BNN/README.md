@@ -1,7 +1,7 @@
 # BNN (neural network)
 
 ## bin2tarce.py
-This file converts *.bin files into .trace and .txt files.   
+This file converts *.bin files into *.trace and *.txt files.   
 ```bash
 python3 bin2trace.py
 ```
@@ -25,4 +25,7 @@ $ cd output
 $ ./main
 ```
 ### Order of weight values
-created by mathlab
+**The order of the first weights**
+![Fweight](./1weight.jpg)
+**The order of the second weights**
+![Fweight](./2weight.jpg)
