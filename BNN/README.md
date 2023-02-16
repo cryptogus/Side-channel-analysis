@@ -59,3 +59,4 @@ path=strcat(res_path, '\\mathlab\\first\\%03d(0x%02x).txt');
 ```
 $ gcc flag.c -o flag
 ```
+The answer is "53 43 41 5F 69 73 2D 50 4F 57 45 52 46 55 4C 21"
