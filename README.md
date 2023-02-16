@@ -24,12 +24,4 @@ https://en.wikipedia.org/wiki/Row_hammer
 
 - **Cache Side-channel attack**: An attack technique that collects and analyzes traces left in cache memory while a particular program is working.   
 
-so on.
----
-Here is the data on side-channel attacks that I studied.   
-I have also added problems and codes that I solved in CTF.   
-
-I am very grateful to the professor Han and other graduate students   
-in the KooKmin University's SICADA laboratory for teaching me generously.
-
-2023.02.11
+etc
