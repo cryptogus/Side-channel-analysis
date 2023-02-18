@@ -1,17 +1,17 @@
 # RSA under fault attack
 
 ### You should install sagemath package
-```
+```bash
 sudo apt update && sudo apt upgrade -y
 sudo apt install sagemath
 ```
 ### Usage
-```
+```sage
 sage Fault_attack.sage
 ```
 
 ### Confirm the secret key "d"
-```
+```sage
 sage Confirm_secret_key.sage
 ```
 ### Get the flag
