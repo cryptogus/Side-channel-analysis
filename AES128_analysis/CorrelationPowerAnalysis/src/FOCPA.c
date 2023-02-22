@@ -114,7 +114,7 @@ void CPA() {
                 //printf("%02x ",plaintext[j]);
 			}
             //printf("\n");
-			fseek(plain, 3 * (Block_Size - byte + 1) - 1, SEEK_CUR);
+			//fseek(plain, 3 * (Block_Size - byte + 1) - 1, SEEK_CUR);
 			
 			
 			for (unsigned long long pi = 0; pi < point_num; pi++) {
