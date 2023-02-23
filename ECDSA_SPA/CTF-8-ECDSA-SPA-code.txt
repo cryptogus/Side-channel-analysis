@@ -1,0 +1,127 @@
+#define ECC_FIELD_WORDS 8
+#define ECC_FIELD_WORDS_ONE 7
+#define ECC_WORD_BITS_SHIFT 5
+
+typedef struct EccPoint {
+    uint32_t x[ECC_FIELD_WORDS];
+    uint32_t y[ECC_FIELD_WORDS];
+    uint32_t z[ECC_FIELD_WORDS];
+} EccPoint;
+
+uint32_t p256r1_p[ECC_FIELD_WORDS] = {0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0x00000000, 0x00000000, 0x00000000, 0x00000001, 0xFFFFFFFF};
+uint32_t p256r1_n[ECC_FIELD_WORDS] = {0xFC632551, 0xF3B9CAC2, 0xA7179E84, 0xBCE6FAAD, 0xFFFFFFFF, 0xFFFFFFFF, 0x00000000, 0xFFFFFFFF};
+uint32_t p256r1_b[ECC_FIELD_WORDS] = {0x27D2604B, 0x3BCE3C3E, 0xCC53B0F6, 0x651D06B0, 0x769886BC, 0xB3EBBD55, 0xAA3A93E7, 0x5AC635D8};
+EccPoint p256r1_G = {{0xD898C296, 0xF4A13945, 0x2DEB33A0, 0x77037D81, 0x63A440F2, 0xF8BCE6E5, 0xE12C4247, 0x6B17D1F2}, {0x37BF51F5, 0xCBB64068, 0x6B315ECE, 0x2BCE3357, 0x7C0F9E16, 0x8EE7EB4A, 0xFE1A7F9B, 0x4FE342E2}, {1}};
+
+uint32_t ECC_Field_getBit(uint32_t *input, int32_t bit) {
+	return (input[bit >> ECC_WORD_BITS_SHIFT] & ((uint32_t)1 << (bit & ECC_WORD_BITS_ONE)));
+}
+
+uint32_t ECC_Field_numBits(uint32_t *input) {
+	int8_t i;
+	uint32_t digit;
+	uint32_t numDigits;
+	for (numDigits = ECC_FIELD_WORDS_ONE; numDigits >= 0 && input[numDigits] == 0; numDigits--);
+	numDigits++;
+	if (!numDigits)
+		return 0;
+	digit = input[numDigits - 1];
+	for (i = 0; digit; i++)
+		digit >>= 1;
+	return (((uint32_t)(numDigits - 1) << ECC_WORD_BITS_SHIFT) + i);
+}
+
+extern void ECC_Point_add(EccPoint *result, EccPoint *point1, EccPoint *point2) {
+	uint32_t T1[ECC_FIELD_WORDS];
+	uint32_t T2[ECC_FIELD_WORDS];
+	uint32_t T3[ECC_FIELD_WORDS];
+	uint32_t T4[ECC_FIELD_WORDS];
+	EccPoint out;
+	ECC_Field_modSqu(T1, point1->z);        // T1 = Z1^2 = A
+	ECC_Field_modMul(T2, T1, point1->z);    // T2 = Z1 * A = B
+	ECC_Field_modMul(T1, T1, point2->x);    // T1 = X2 * A = C
+	ECC_Field_modMul(T2, T2, point2->y);    // T2 = Y2 * B = D
+	ECC_Field_modSub(T1, T1, point1->x);    // T1 = C - X1 = E
+	ECC_Field_modSub(T2, T2, point1->y);    // T2 = D - Y1 = F
+	ECC_Field_modMul(out.z, T1, point1->z); // Z3 = Z1 * E
+	ECC_Field_modSqu(T3, T1);               // T3 = E^2 = G
+	ECC_Field_modMul(T4, T3, T1);           // T4 = E^3 = H
+	ECC_Field_modMul(T3, T3, point1->x);    // T3 = X1 * G = I
+	ECC_Field_modAdd(T1, T3, T3);           // T1 = 2I
+	ECC_Field_modSqu(out.x, T2);            // X3 = F^2
+	ECC_Field_modSub(out.x, out.x, T1);     // X3 = F^2 - 2I
+	ECC_Field_modSub(out.x, out.x, T4);     // X3 = F^2 - (H + 2I)
+	ECC_Field_modSub(T3, T3, out.x);        // T3 = I - X3
+	ECC_Field_modMul(T3, T3, T2);           // T3 = F(I - X3)
+	ECC_Field_modMul(T4, T4, point1->y);    // T4 = Y1 * H
+	ECC_Field_modSub(out.y, T3, T4);        // Y3 = F(I - X3) - Y1 * H
+	ECC_Field_set(result->x, out.x);
+	ECC_Field_set(result->y, out.y);
+	ECC_Field_set(result->z, out.z);
+	return;
+}
+
+
+extern void ECC_Point_dbl(EccPoint *result, EccPoint *point) {
+	uint32_t T1[ECC_FIELD_WORDS];
+	uint32_t T2[ECC_FIELD_WORDS];
+	uint32_t T3[ECC_FIELD_WORDS];
+	uint32_t carry;
+	EccPoint out;
+	ECC_Field_modSqu(T1, point->z);              // T1 = Z1^2
+	ECC_Field_modSub(T2, point->x, T1);          // T2 = X1 - Z1^2
+	ECC_Field_modAdd(T1, point->x, T1);          // T1 = X1 + T1
+	ECC_Field_modMul(T2, T2, T1);                // T2 = X1^2 - Z1^4
+	ECC_Field_modAdd(T3, T2, T2);                // T2 = 3(X1 - Z1^2)(X1 + Z1^2) = A
+	ECC_Field_modAdd(T2, T3, T2);
+	ECC_Field_modAdd(out.y, point->y, point->y); // Y3 = 2Y1 = B
+	ECC_Field_modMul(out.z, out.y, point->z);    // Z3 = B * Z1	
+	ECC_Field_modSqu(out.y, out.y);              // Y3 = B^2 = C
+	ECC_Field_modMul(T3, out.y, point->x);       // T3 = C * X1 = D
+	ECC_Field_modSqu(out.y, out.y);              // Y3 = C^2
+	if (ECC_Field_getBit(out.y, 0)) {
+		carry = ECC_Field_add(out.y, out.y, p256r1_p);
+		ECC_Field_rshift1(out.y);
+		out.y[ECC_FIELD_WORDS_ONE] |= carry << (ECC_WORD_BITS_ONE);
+	}
+	else
+		ECC_Field_rshift1(out.y);                // Y3 = C^2 / 2
+	ECC_Field_modSqu(out.x, T2);                 // X3 = A^2
+	ECC_Field_modAdd(T1, T3, T3);                // T1 = 2D
+	ECC_Field_modSub(out.x, out.x, T1);          // X3 = A^2 - 2D
+	ECC_Field_modSub(T1, T3, out.x);             // T1 = D - X3
+	ECC_Field_modMul(T1, T1, T2);                // T1 = (D - X3)A
+	ECC_Field_modSub(out.y, T1, out.y);          // Y3 = (D - X3)A - C^2 / 2
+	ECC_Field_set(result->x, out.x);
+	ECC_Field_set(result->y, out.y);
+	ECC_Field_set(result->z, out.z);
+	return;
+}
+
+void ECC_Point_mul(EccPoint* result, EccPoint* point, uint32_t* scalar) {
+
+	int32_t msb;
+	uint32_t invZ[ECC_FIELD_WORDS];
+	uint32_t invZ2[ECC_FIELD_WORDS];
+	uint32_t numBits = ECC_Field_numBits(scalar);
+	EccPoint R[2];
+	ECC_Field_set(R[0].x, point->x);
+	ECC_Field_set(R[0].y, point->y);
+	ECC_Field_set(R[0].z, point->z);
+	ECC_Field_set(R[1].x, point->x);
+	ECC_Field_set(R[1].y, point->y);
+	ECC_Field_set(R[1].z, point->z);
+	for (msb = numBits - 2; msb >= 0; msb--) {
+		ECC_Point_dbl(&R[0], &R[0]);
+		if (ECC_Field_getBit(scalar, msb))
+		{
+			ECC_Point_add(&R[0], &R[0], point);
+		}
+	}
+	ECC_Field_modInv(invZ, R[0].z);             // Z^-1
+	ECC_Field_modSqu(invZ2, invZ);              // Z^-2
+	ECC_Field_modMul(invZ, invZ, invZ2);        // Z^-3
+	ECC_Field_modMul(result->x, R[0].x, invZ2); // X * Z^-2
+	ECC_Field_modMul(result->y, R[0].y, invZ);  // Y * Z^-3
+	return;
+}
