@@ -14,7 +14,7 @@ $ du -h CTF-8-ECDSA-SPA-trace.bin
 479M    CTF-8-ECDSA-SPA-trace.bin
 ```
 
-## Parsing the Point of the Trace of ECDSA
+## Parsing the Point of the Trace of ECDSA & plotting graph
 ```
 $ cd ECDSA_SPA
 
