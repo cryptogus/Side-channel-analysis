@@ -19,7 +19,7 @@ trace_num = int.from_bytes(trace.read(4), "little")
 point_num = int.from_bytes(trace.read(4), "little")
 print('trace num:',trace_num)
 print('point num:',point_num)
-
+'''
 f = open(binFilePath + '/' + 'ECDSA.txt', 'w')
 trace.seek(16)
 for i in range(point_num):
@@ -28,9 +28,8 @@ for i in range(point_num):
 f.close()
 
 print("finish")
-
-# 파형 포인트가 너무 크니 1개의 파형을 2000000포인트씩 63개로 나눔
 '''
+# 파형 포인트가 너무 크니 1개의 파형을 2000000포인트씩 63개로 나눔
 for j in range(63):
    
     fp     = open(binFilePath + '/63part/' + 'ECDSA' + str(j+1) + '.txt', 'w')
@@ -42,4 +41,3 @@ for j in range(63):
         #print(trace.tell())    
         fp.write(str(X) + '\n')
     fp.close()
-'''
