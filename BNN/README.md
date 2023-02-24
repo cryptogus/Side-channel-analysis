@@ -36,7 +36,7 @@ $ cd mathlab
 start OrderOfWeight.m   
 Please enter the path where mathlab folder is located in the variable.  
 ```
-res_path = <File path>;   
+res_path = <File absolute path>;   
 ```
 If you want to get a second weighted graph, erase the %
 
