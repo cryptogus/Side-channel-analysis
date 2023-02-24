@@ -4,7 +4,7 @@ clear all;
 
 start_tr = 2;
 % File absolute path
-res_path = 'C:\\Users/sidechannel';
+res_path = '.';
 
 START_POINT = 1;
 
