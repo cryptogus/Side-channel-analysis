@@ -16,6 +16,11 @@ $ du -h CTF-8-ECDSA-SPA-trace.bin
 
 ## Parsing the Point of the Trace of ECDSA
 ```
+$ cd ECDSA_SPA
+
+# make directory "html_plot"
+$ mkdir html_plot
+
 $ python3 b2tECDSA.py
 
 $ pip install --upgrade pip
