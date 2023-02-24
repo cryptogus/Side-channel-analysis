@@ -25,7 +25,7 @@ $ pip install numpy
 $ python3 Trace_plot.py
 $ cd html_plot
 ```
-If you use Jupyter botebook (or google colab), you can use `output_notebook` function in Trace_plot to see plot directly
+If you use Jupyter botebook (or google colab), you can use `output_notebook` function in Trace_plot to see plot directly   
 About `output_<>`   
 See bokeh.io   
 ### Troubleshooting
