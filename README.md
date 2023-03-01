@@ -20,7 +20,8 @@ Side channel analysis is an analysis method that acquires, processes, and analyz
 Fault injection: If the purpose of DFA is to analyze through differences between normal and abnormal operations, it is an attack aimed at error injection itself. For example, an electromagnetic error is injected into a door lock to make it mistaken for an open signal (in fact, it should be viewed as a DFA parent category). This is because DFA also prioritizes error injection.)
 
 - **Rowhammer attack**: The rowhammer bug belongs to software-induced hardware faults, and has been exploited to form a wide range of powerful rowhammer attacks. Rowhammer attacks work by rapidly and repeatedly reading data in one memory row (ex. DRAM)to cause an electrical charge in adjacent memory rows in order to modify or corrupt data.   
-https://en.wikipedia.org/wiki/Row_hammer
+https://en.wikipedia.org/wiki/Row_hammer   
+https://github.com/google/rowhammer-test
 
 - **Cache Side-channel attack**: An attack technique that collects and analyzes traces left in cache memory while a particular program is working.   
 
