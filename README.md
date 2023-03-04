@@ -26,3 +26,7 @@ https://github.com/google/rowhammer-test
 - **Cache Side-channel attack**: An attack technique that collects and analyzes traces left in cache memory while a particular program is working.   
 
 etc
+
+## A good program to use to read binary files
+**HxD Hex Editor**\
+https://mh-nexus.de/en/hxd/
