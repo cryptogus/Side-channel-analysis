@@ -32,8 +32,36 @@ s13 = p0 ^p3 ^ p6 ^ p7 ^ p8 ^ p10 ^ p13
 s14 = p0 ^p3 ^ p4 ^ p5 ^ p9 ^ p11 ^ p14
 s15 = p1 ^p2 ^ p4 ^ p5 ^ p8 ^ p10 ^ p15
 ```
+## Guess ARIA round key using FOCPA
+```bash
+$ cd FOCPA_C
+# using c source code!
+```
+you can find FOCPA result in 5 directories
+
 ## Master Key 추출
 
 ```bash
-$ python3 MasterKeyRecovery.py
+$ python3 MasterKeyRecovery1.py
+$ gcc MasterKeyRecovery2.c
+# W1[16] array is result from MasterKeyRecovery1.py in MasterKeyRecovery2.c
+```
+```c
+////From MasterKeyRecovery1.py
+unsigned char W1[16] = {    0b00100111
+							,0b00010111
+							,0b10000111
+							,0b01001001
+							,0b11111000
+							,0b11110001
+							,0b11101110
+							,0b10110100
+							,0b10111001
+							,0b01100101
+							,0b10100011
+							,0b01010101
+							,0b00110111
+							,0b00100100
+							,0b00000101
+							,0b11100010 };
 ```
