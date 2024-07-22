@@ -14,7 +14,7 @@ Plaintext, Trace information source is "Side Channel Attack Contest 2022" → ht
 
 # Code 해석
 
-First Order Correlation Power Analysis는 8-bit 연산 기준으로(꼭 8-bit일 필요는 없지만 일반적으로) 특정 연산의 결과 값의 Hamming Weight(or Distance)와 해당 연산을 수행하며 방출되는 전력 소비량이 비례한다는 특징을 이용한다.
+First Order Correlation Power Analysis(FOCPA)는 8-bit 연산 기준으로(꼭 8-bit일 필요는 없음. 타겟 보드가 32-bit 프로세서일 수도 있는데, LEA의 설계가 32-bit 단위로 연산하도록 되어있어서, 32-bit 단위 연산으로 짠 LEA SW 코드를 8-bit 보드를 이용해 분석을 시도하면, 분석이 잘 안될 수 있음) 특정 연산의 결과 값의 Hamming Weight(or Distance)와 해당 연산을 수행하며 방출되는 전력 소비량이 비례한다는 특징을 이용한다.
 
 ![image](https://github.com/user-attachments/assets/b3417e3e-99d0-47f5-b1ac-66aced1a0adc)  
 그림출처 - https://onlinelibrary.wiley.com/doi/10.1155/2022/7375097
