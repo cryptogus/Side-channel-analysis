@@ -181,6 +181,11 @@ void CPA() {
 	for (unsigned int i = 0; i < byte; i++) {
 		printf("%02x ", index[i]);
 	}
+	printf("\n");
+	printf("Master Key(ASCII): ");
+	for (unsigned int i = 0; i < byte; i++) {
+		printf("%c", index[i]);
+	}
 	printf("\n\n");
 	for (unsigned int i = 0; i < byte; i++) {
 		printf("%02dst byte maximum correlation coefficient is %g \n", start_byte + i ,MaxCorrs[i]);
